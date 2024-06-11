@@ -1,1 +1,1 @@
-export const backEnd = "http://localhost:3005/";
+export const backEnd = "https://dnf-back.onrender.com/";
