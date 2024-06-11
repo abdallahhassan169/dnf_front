@@ -12,6 +12,7 @@ import LoginForm from "./pages/Auth/Login";
 import RegisterForm from "./pages/Auth/Register";
 import { Outlet } from "react-router-dom";
 import Admin from "./pages/Admin/Admin";
+import { AuthProvider, useAuth } from "./contexts/Auth";
 
 const { Button } = chakraTheme.components;
 
@@ -21,16 +22,17 @@ const theme = extendBaseTheme({
   },
 });
 function App() {
-  const isAdmin = false;
+  const { isLoggedIn, user } = useAuth();
+  const isAdmin = user?.isAdmin;
   return (
     <div className="App">
       <ChakraProvider>
         {/* // <Order /> */}
         {/* <LoginForm /> */}
         {/* <RegisterForm /> */}
-        {false && isAdmin ? (
+        {isLoggedIn && isAdmin ? (
           <Admin />
-        ) : false && !isAdmin ? (
+        ) : isLoggedIn && !isAdmin ? (
           <Order />
         ) : (
           <Outlet />

@@ -13,14 +13,15 @@ import {
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { color } from "framer-motion";
+import { useAuth } from "../../contexts/Auth";
+import { postApi } from "../../utilis/PostApi";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const toast = useToast();
-
-  const handleLogin = () => {
-    // Implement your login logic here
+  const { login } = useAuth();
+  const handleLogin = async () => {
     if (email === "" || password === "") {
       toast({
         title: "Error",
@@ -30,13 +31,28 @@ const LoginForm = () => {
         isClosable: true,
       });
     } else {
-      toast({
-        title: "Success",
-        description: "Logged in successfully.",
-        status: "success",
-        duration: 5000,
-        isClosable: true,
+      const data = await postApi("auth/login", {
+        email,
+        password,
       });
+      if (data.status === 200) {
+        login(data);
+        toast({
+          title: "Success",
+          description: "Logged in successfully.",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: "Incorrect Data",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+      }
     }
   };
 
